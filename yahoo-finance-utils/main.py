@@ -84,7 +84,10 @@ def queryYahoo(status, name, data: DataWrapper):
                             and isinstance(dateTo, datetime.date)
                         ):
                             data.payload = yf.download(
-                                tickers, start=str(dateFrom), end=str(dateTo), auto_adjust=False
+                                tickers,
+                                start=str(dateFrom),
+                                end=str(dateTo),
+                                auto_adjust=False,
                             )
                         else:
                             print(str(dateFrom))
@@ -155,7 +158,9 @@ def selectFileFromPath(path: str):
     selFile = []
     idx = Enum(1, transform=lambda x: str(x))
     for file in files:
-        fileMenu.append(idx.count(), CLIMenu(file, lambda stay, _: selFile.append(file)))
+        fileMenu.append(
+            idx.count(), CLIMenu(file, lambda stay, _: selFile.append(file))
+        )
 
     fileMenu.append(*exitOption("cancel"))
     fileMenu.run()
