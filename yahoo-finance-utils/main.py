@@ -158,9 +158,8 @@ def selectFileFromPath(path: str):
     selFile = []
     idx = Enum(1, transform=lambda x: str(x))
     for file in files:
-        fileMenu.append(
-            idx.count(), CLIMenu(file, lambda stay, _: selFile.append(file))
-        )
+        genlm = lambda x: lambda stay, _: selFile.append(x)
+        fileMenu.append(idx.count(), CLIMenu(file, genlm(file)))
 
     fileMenu.append(*exitOption("cancel"))
     fileMenu.run()
