@@ -63,7 +63,7 @@ def queryYahoo(status, name, data: DataWrapper):
             )
 
         case "from file":
-            source = "./data-in"
+            source = os.path.normpath("./data-in")
 
             try:
                 print()
@@ -71,8 +71,8 @@ def queryYahoo(status, name, data: DataWrapper):
                 if filepath is None:
                     print("Operation was canceled")
                 else:
+                    print("loading", filepath)
                     filepath = os.path.join(source, filepath)
-                    print(filepath)
                     with open(filepath, encoding="utf-8") as stream:
                         query = yaml.safe_load(stream)
                         tickers = query["tickers"]
@@ -152,14 +152,14 @@ def selectFileFromPath(path: str):
 
     exitOption = lambda name: ("0", CLIMenu(name, lambda stay, enter: None))
     fileMenu = CLIMenu("Select a file", lambda stay, enter: enter)
-    selFile = DataWrapper()
+    selFile = []
     idx = Enum(1, transform=lambda x: str(x))
     for file in files:
-        fileMenu.append(idx.count(), CLIMenu(file, lambda stay, _: selFile.set(file)))
+        fileMenu.append(idx.count(), CLIMenu(file, lambda stay, _: selFile.append(file)))
 
     fileMenu.append(*exitOption("cancel"))
     fileMenu.run()
-    return selFile.payload
+    return selFile.pop() if selFile else None
 
 
 class CLIMenu:
